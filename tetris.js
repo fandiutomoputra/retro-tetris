@@ -134,6 +134,8 @@ class TetrisGame {
     }
     
     handleKeyDown(event) {
+        console.log('Key pressed:', event.code, 'Game started:', this.gameStarted, 'Game over:', this.gameOver);
+        
         if (!this.gameStarted || this.gameOver) {
             if (event.code === 'Space' || event.code === 'Enter') {
                 this.startGame();
@@ -219,6 +221,12 @@ class TetrisGame {
     }
     
     startGame() {
+        console.log('startGame called, current state:', { 
+            started: this.gameStarted, 
+            over: this.gameOver,
+            paused: this.paused 
+        });
+        
         if (this.gameStarted && !this.gameOver) return;
         
         this.gameStarted = true;
@@ -233,6 +241,7 @@ class TetrisGame {
         this.nextPiece = getRandomPiece();
         this.spawnNewPiece();
         this.canHold = true;
+        this.lastDropTime = performance.now(); // Reset drop timer
         
         document.getElementById('start-screen').style.display = 'none';
         document.getElementById('game-over-screen').style.display = 'none';
@@ -287,11 +296,15 @@ class TetrisGame {
     }
     
     spawnNewPiece() {
+        console.log('spawnNewPiece called, nextPiece:', this.nextPiece?.name);
+        
         this.currentPiece = this.nextPiece;
         this.nextPiece = getRandomPiece();
         this.currentPiece.row = 0;
         this.currentPiece.col = Math.floor(this.GRID_WIDTH / 2) - 1;
         this.canHold = true;
+        
+        console.log('New current piece:', this.currentPiece?.name, 'Next piece:', this.nextPiece?.name);
         
         // Check for game over (piece spawns in occupied space)
         if (this.checkCollision(this.currentPiece)) {
@@ -307,7 +320,12 @@ class TetrisGame {
     }
     
     movePiece(dx, dy) {
-        if (!this.currentPiece || this.gameOver || this.paused) return;
+        console.log('movePiece called:', dx, dy, 'Current piece:', this.currentPiece?.name);
+        
+        if (!this.currentPiece || this.gameOver || this.paused) {
+            console.log('movePiece blocked - no piece or game state');
+            return;
+        }
         
         const testPiece = this.currentPiece.clone();
         testPiece.col += dx;
@@ -512,6 +530,11 @@ class TetrisGame {
     }
     
     gameLoop(timestamp) {
+        // Initialize lastFrameTime if first frame
+        if (!this.lastFrameTime) {
+            this.lastFrameTime = timestamp;
+        }
+        
         // Calculate delta time
         const deltaTime = timestamp - this.lastFrameTime;
         this.lastFrameTime = timestamp;

@@ -165,7 +165,9 @@ function drawPiece(ctx, piece, x, y, size, isGhost = false) {
         piece: piece?.name, 
         x, y, size, 
         isGhost,
-        ctxType: ctx?.constructor?.name 
+        ctxType: ctx?.constructor?.name,
+        rotation: piece?.rotation,
+        shapeLength: piece?.shape?.length
     });
     
     if (!ctx || !piece) {
@@ -174,13 +176,17 @@ function drawPiece(ctx, piece, x, y, size, isGhost = false) {
     }
     
     const shape = piece.shape[piece.rotation];
+    console.log('Shape at rotation', piece.rotation, ':', JSON.stringify(shape));
     const color = isGhost ? `${piece.color}80` : piece.color; // 80 = 50% opacity
     
     console.log('Drawing shape:', shape, 'color:', color);
     
     for (let r = 0; r < shape.length; r++) {
         for (let c = 0; c < shape[r].length; c++) {
-            if (shape[r][c]) {
+            const cellValue = shape[r][c];
+            console.log(`Shape[${r}][${c}] = ${cellValue}, truthy: ${!!cellValue}`);
+            
+            if (cellValue) {
                 const blockX = x + c * size;
                 const blockY = y + r * size;
                 

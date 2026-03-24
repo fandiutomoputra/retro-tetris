@@ -606,11 +606,6 @@ class TetrisGame {
         // Draw grid background
         this.drawGrid();
         
-        // Test: Draw a simple rectangle to verify canvas works
-        this.ctx.fillStyle = '#ff0000';
-        this.ctx.fillRect(10, 10, 50, 50);
-        console.log('Test rectangle drawn');
-        
         // Draw locked pieces
         this.drawLockedPieces();
         

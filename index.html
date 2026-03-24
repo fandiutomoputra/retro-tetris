@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RETRO TETRIS - Classic Arcade Game</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="arcade-cabinet">
+        <!-- CRT Monitor Effect -->
+        <div class="crt-screen">
+            <div class="scanlines"></div>
+            <div class="glow"></div>
+            
+            <!-- Game Header -->
+            <div class="game-header">
+                <h1 class="game-title">RETRO TETRIS</h1>
+                <div class="marquee">
+                    <span>CLASSIC ARCADE • 1989 • INSERT COIN •</span>
+                </div>
+            </div>
+            
+            <!-- Main Game Area -->
+            <div class="game-container">
+                <!-- Left Panel: Game Info -->
+                <div class="panel left-panel">
+                    <div class="info-box">
+                        <h2><i class="fas fa-trophy"></i> SCORE</h2>
+                        <div class="score-display" id="score">000000</div>
+                    </div>
+                    
+                    <div class="info-box">
+                        <h2><i class="fas fa-chart-line"></i> LEVEL</h2>
+                        <div class="level-display" id="level">01</div>
+                    </div>
+                    
+                    <div class="info-box">
+                        <h2><i class="fas fa-layer-group"></i> LINES</h2>
+                        <div class="lines-display" id="lines">000</div>
+                    </div>
+                    
+                    <div class="info-box">
+                        <h2><i class="fas fa-fast-forward"></i> NEXT</h2>
+                        <div class="next-piece" id="next-piece">
+                            <canvas id="next-canvas" width="80" height="80"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="info-box">
+                        <h2><i class="fas fa-hand-paper"></i> HOLD</h2>
+                        <div class="hold-piece" id="hold-piece">
+                            <canvas id="hold-canvas" width="80" height="80"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Center Panel: Game Board -->
+                <div class="panel center-panel">
+                    <div class="game-board">
+                        <canvas id="game-canvas" width="300" height="600"></canvas>
+                    </div>
+                    
+                    <!-- Game State Messages -->
+                    <div class="game-state" id="game-state">
+                        <div class="start-screen" id="start-screen">
+                            <h2>PRESS START</h2>
+                            <p>Use arrow keys or buttons</p>
+                            <button class="arcade-btn start-btn" id="start-btn">
+                                <i class="fas fa-play"></i> START GAME
+                            </button>
+                        </div>
+                        
+                        <div class="game-over-screen" id="game-over-screen" style="display: none;">
+                            <h2>GAME OVER</h2>
+                            <p>FINAL SCORE: <span id="final-score">000000</span></p>
+                            <button class="arcade-btn restart-btn" id="restart-btn">
+                                <i class="fas fa-redo"></i> PLAY AGAIN
+                            </button>
+                        </div>
+                        
+                        <div class="pause-screen" id="pause-screen" style="display: none;">
+                            <h2>PAUSED</h2>
+                            <p>Press P to resume</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Panel: Controls & Instructions -->
+                <div class="panel right-panel">
+                    <div class="info-box">
+                        <h2><i class="fas fa-gamepad"></i> CONTROLS</h2>
+                        <div class="controls-list">
+                            <div class="control-item">
+                                <span class="key">← →</span>
+                                <span class="desc">Move</span>
+                            </div>
+                            <div class="control-item">
+                                <span class="key">↑</span>
+                                <span class="desc">Rotate</span>
+                            </div>
+                            <div class="control-item">
+                                <span class="key">↓</span>
+                                <span class="desc">Soft Drop</span>
+                            </div>
+                            <div class="control-item">
+                                <span class="key">SPACE</span>
+                                <span class="desc">Hard Drop</span>
+                            </div>
+                            <div class="control-item">
+                                <span class="key">C</span>
+                                <span class="desc">Hold Piece</span>
+                            </div>
+                            <div class="control-item">
+                                <span class="key">P</span>
+                                <span class="desc">Pause</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-box">
+                        <h2><i class="fas fa-volume-up"></i> AUDIO</h2>
+                        <div class="audio-controls">
+                            <button class="arcade-btn audio-btn" id="music-toggle">
+                                <i class="fas fa-music"></i> MUSIC: ON
+                            </button>
+                            <button class="arcade-btn audio-btn" id="sfx-toggle">
+                                <i class="fas fa-volume-up"></i> SFX: ON
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="info-box">
+                        <h2><i class="fas fa-info-circle"></i> SCORING</h2>
+                        <div class="scoring-info">
+                            <p>1 Line: <span class="points">100</span></p>
+                            <p>2 Lines: <span class="points">300</span></p>
+                            <p>3 Lines: <span class="points">500</span></p>
+                            <p>4 Lines: <span class="points">800</span></p>
+                            <p>Combo: +50 per line</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mobile Controls (Visible on mobile only) -->
+            <div class="mobile-controls" id="mobile-controls">
+                <div class="control-row">
+                    <button class="mobile-btn rotate-btn" id="rotate-btn">
+                        <i class="fas fa-redo"></i> ROTATE
+                    </button>
+                    <button class="mobile-btn up-btn" id="up-btn">
+                        <i class="fas fa-arrow-up"></i>
+                    </button>
+                </div>
+                
+                <div class="control-row">
+                    <button class="mobile-btn left-btn" id="left-btn">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <button class="mobile-btn down-btn" id="down-btn">
+                        <i class="fas fa-arrow-down"></i> DROP
+                    </button>
+                    <button class="mobile-btn right-btn" id="right-btn">
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+                
+                <div class="control-row">
+                    <button class="mobile-btn hold-btn" id="hold-btn">
+                        <i class="fas fa-hand-paper"></i> HOLD
+                    </button>
+                    <button class="mobile-btn pause-btn" id="pause-btn">
+                        <i class="fas fa-pause"></i> PAUSE
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Footer -->
+            <div class="game-footer">
+                <div class="credits">
+                    <span class="credit-text">CREATED BY MEVI</span>
+                    <span class="credit-text">• RETRO ARCADE EDITION •</span>
+                    <span class="credit-text">© 2026</span>
+                </div>
+                <div class="status-indicators">
+                    <span class="status" id="game-status">READY</span>
+                    <span class="status" id="fps-counter">60 FPS</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Arcade Cabinet Decals -->
+        <div class="cabinet-decal left-decal">
+            <div class="decal-text">TETRIS</div>
+            <div class="decal-text">ARCADE</div>
+        </div>
+        <div class="cabinet-decal right-decal">
+            <div class="decal-text">INSERT</div>
+            <div class="decal-text">COIN</div>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="pieces.js"></script>
+    <script src="audio.js"></script>
+    <script src="tetris.js"></script>
+    
+    <!-- Game Initialization -->
+    <script>
+        // Initialize game when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            const game = new TetrisGame();
+            game.init();
+        });
+    </script>
+</body>
+</html>

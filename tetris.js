@@ -240,7 +240,7 @@ class TetrisGame {
         
         this.updateUI();
         
-        if (this.audio && this.musicEnabled) {
+        if (this.audio && this.audio.isSupported && this.musicEnabled) {
             this.audio.startMusic();
         }
     }
@@ -255,9 +255,9 @@ class TetrisGame {
         this.paused = !this.paused;
         document.getElementById('pause-screen').style.display = this.paused ? 'flex' : 'none';
         
-        if (this.paused && this.audio) {
+        if (this.paused && this.audio && this.audio.isSupported) {
             this.audio.stopMusic();
-        } else if (!this.paused && this.audio && this.musicEnabled) {
+        } else if (!this.paused && this.audio && this.audio.isSupported && this.musicEnabled) {
             this.audio.startMusic();
         }
     }
@@ -267,7 +267,7 @@ class TetrisGame {
         const btn = document.getElementById('music-toggle');
         btn.innerHTML = `<i class="fas fa-music"></i> MUSIC: ${this.musicEnabled ? 'ON' : 'OFF'}`;
         
-        if (this.audio) {
+        if (this.audio && this.audio.isSupported) {
             if (this.musicEnabled && !this.paused) {
                 this.audio.startMusic();
             } else {

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Retro Tetris</title>
+</head>
+<body>
+    <div id="game-canvas"></div>
+    <div id="next-canvas"></div>
+    <div id="hold-canvas"></div>
+    <div id="score">000000</div>
+    <div id="level">01</div>
+    <div id="lines">000</div>
+    <div id="game-status">READY</div>
+    <div id="final-score">000000</div>
+    <div id="start-screen"></div>
+    <div id="game-over-screen"></div>
+    <div id="pause-screen"></div>
+    <div id="music-toggle"></div>
+    <div id="sfx-toggle"></div>
+    <div id="start-btn"></div>
+    <div id="restart-btn"></div>
+    <div id="left-btn"></div>
+    <div id="right-btn"></div>
+    <div id="up-btn"></div>
+    <div id="down-btn"></div>
+    <div id="rotate-btn"></div>
+    <div id="hold-btn"></div>
+    <div id="pause-btn"></div>
+    <script>
+        console.log('Testing Retro Tetris initialization...');
+        
+        // Mock missing browser APIs
+        if (!window.AudioContext) {
+            window.AudioContext = class {
+                createOscillator() { return { 
+                    connect: () => {}, 
+                    start: () => {}, 
+                    stop: () => {},
+                    frequency: { setValueAtTime: () => {} },
+                    type: ''
+                }; }
+                createGain() { return { 
+                    connect: () => {}, 
+                    gain: { setValueAtTime: () => {}, exponentialRampToValueAtTime: () => {} }
+                }; }
+                currentTime: 0
+            };
+            window.webkitAudioContext = window.AudioContext;
+        }
+        
+        // Load scripts
+        const scripts = ['pieces.js', 'audio.js', 'tetris.js'];
+        let loaded = 0;
+        
+        scripts.forEach(src => {
+            const script = document.createElement('script');
+            script.src = src;
+            script.onload = () => {
+                loaded++;
+                if (loaded === scripts.length) {
+                    console.log('All scripts loaded');
+                    try {
+                        const game = new TetrisGame();
+                        game.init();
+                        console.log('Game initialized successfully!');
+                    } catch (error) {
+                        console.error('Game initialization failed:', error);
+                    }
+                }
+            };
+            script.onerror = (e) => {
+                console.error('Failed to load script:', src, e);
+            };
+            document.head.appendChild(script);
+        });
+    </script>
+</body>
+</html>

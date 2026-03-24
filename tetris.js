@@ -52,15 +52,12 @@ class TetrisGame {
         
         // Get canvas elements
         this.canvas = document.getElementById('game-canvas');
-        console.log('Game canvas:', this.canvas, 'width:', this.canvas?.width, 'height:', this.canvas?.height);
-        
         if (!this.canvas) {
             console.error('Game canvas not found!');
             return;
         }
         
         this.ctx = this.canvas.getContext('2d');
-        console.log('Canvas context:', this.ctx);
         
         this.nextCanvas = document.getElementById('next-canvas');
         this.nextCtx = this.nextCanvas?.getContext('2d');
@@ -71,16 +68,12 @@ class TetrisGame {
         this.initAudio();
         
         // Create first pieces
-        console.log('Testing getRandomPiece:', typeof getRandomPiece);
-        
         if (typeof getRandomPiece !== 'function') {
             console.error('getRandomPiece is not a function! pieces.js may not be loaded.');
             return;
         }
         
         this.nextPiece = getRandomPiece();
-        console.log('Next piece created:', this.nextPiece?.name);
-        
         this.spawnNewPiece();
         
         // Setup event listeners
@@ -92,11 +85,8 @@ class TetrisGame {
         // Start game loop
         requestAnimationFrame(this.gameLoop);
         
-        console.log('Retro Tetris initialized!', 'Game started:', this.gameStarted);
-        
         // Auto-start game for better UX
         setTimeout(() => {
-            console.log('Auto-start timer fired');
             this.startGame();
         }, 500);
     }
@@ -243,7 +233,6 @@ class TetrisGame {
     }
     
     startGame() {
-        console.log('startGame() called, current state:', {
             gameStarted: this.gameStarted,
             gameOver: this.gameOver,
             paused: this.paused,
@@ -342,10 +331,8 @@ class TetrisGame {
     }
     
     movePiece(dx, dy) {
-        console.log('movePiece(', dx, dy, ') called - currentPiece:', this.currentPiece?.name, 'gameOver:', this.gameOver, 'paused:', this.paused);
         
         if (!this.currentPiece || this.gameOver || this.paused) {
-            console.log('movePiece blocked');
             return;
         }
         
@@ -592,7 +579,6 @@ class TetrisGame {
     }
     
     render() {
-        console.log('render() called - currentPiece:', this.currentPiece?.name, 'at row:', this.currentPiece?.row, 'col:', this.currentPiece?.col);
         console.log('Canvas context:', this.ctx, 'Canvas:', this.canvas);
         
         if (!this.ctx) {
@@ -633,7 +619,6 @@ class TetrisGame {
     }
     
     drawGrid() {
-        console.log('drawGrid() called');
         
         this.ctx.fillStyle = 'rgba(0, 10, 20, 0.9)';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);

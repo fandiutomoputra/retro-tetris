@@ -593,12 +593,23 @@ class TetrisGame {
     
     render() {
         console.log('render() called - currentPiece:', this.currentPiece?.name, 'at row:', this.currentPiece?.row, 'col:', this.currentPiece?.col);
+        console.log('Canvas context:', this.ctx, 'Canvas:', this.canvas);
+        
+        if (!this.ctx) {
+            console.error('Canvas context is null!');
+            return;
+        }
         
         // Clear canvas
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         
         // Draw grid background
         this.drawGrid();
+        
+        // Test: Draw a simple rectangle to verify canvas works
+        this.ctx.fillStyle = '#ff0000';
+        this.ctx.fillRect(10, 10, 50, 50);
+        console.log('Test rectangle drawn');
         
         // Draw locked pieces
         this.drawLockedPieces();
@@ -627,8 +638,12 @@ class TetrisGame {
     }
     
     drawGrid() {
+        console.log('drawGrid() called');
+        
         this.ctx.fillStyle = 'rgba(0, 10, 20, 0.9)';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        console.log('Grid background drawn');
         
         // Draw grid cells
         for (let row = 0; row < this.GRID_HEIGHT; row++) {

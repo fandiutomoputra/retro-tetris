@@ -161,14 +161,30 @@ function getRandomPiece() {
 }
 
 function drawPiece(ctx, piece, x, y, size, isGhost = false) {
+    console.log('drawPiece called:', { 
+        piece: piece?.name, 
+        x, y, size, 
+        isGhost,
+        ctxType: ctx?.constructor?.name 
+    });
+    
+    if (!ctx || !piece) {
+        console.error('drawPiece: Missing ctx or piece!', { ctx, piece });
+        return;
+    }
+    
     const shape = piece.shape[piece.rotation];
     const color = isGhost ? `${piece.color}80` : piece.color; // 80 = 50% opacity
+    
+    console.log('Drawing shape:', shape, 'color:', color);
     
     for (let r = 0; r < shape.length; r++) {
         for (let c = 0; c < shape[r].length; c++) {
             if (shape[r][c]) {
                 const blockX = x + c * size;
                 const blockY = y + r * size;
+                
+                console.log('Drawing block at:', blockX, blockY, 'size:', size);
                 
                 // Draw block with retro style
                 ctx.fillStyle = color;
@@ -193,6 +209,8 @@ function drawPiece(ctx, piece, x, y, size, isGhost = false) {
             }
         }
     }
+    
+    console.log('drawPiece completed');
 }
 
 // Export for use in tetris.js

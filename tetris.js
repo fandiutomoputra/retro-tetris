@@ -75,6 +75,11 @@ class TetrisGame {
         requestAnimationFrame(this.gameLoop);
         
         console.log('Retro Tetris initialized!');
+        
+        // Auto-start game for better UX
+        setTimeout(() => {
+            this.startGame();
+        }, 500);
     }
     
     initGrid() {
@@ -134,8 +139,6 @@ class TetrisGame {
     }
     
     handleKeyDown(event) {
-        console.log('Key pressed:', event.code, 'Game started:', this.gameStarted, 'Game over:', this.gameOver);
-        
         if (!this.gameStarted || this.gameOver) {
             if (event.code === 'Space' || event.code === 'Enter') {
                 this.startGame();
@@ -221,12 +224,6 @@ class TetrisGame {
     }
     
     startGame() {
-        console.log('startGame called, current state:', { 
-            started: this.gameStarted, 
-            over: this.gameOver,
-            paused: this.paused 
-        });
-        
         if (this.gameStarted && !this.gameOver) return;
         
         this.gameStarted = true;
@@ -296,15 +293,11 @@ class TetrisGame {
     }
     
     spawnNewPiece() {
-        console.log('spawnNewPiece called, nextPiece:', this.nextPiece?.name);
-        
         this.currentPiece = this.nextPiece;
         this.nextPiece = getRandomPiece();
         this.currentPiece.row = 0;
         this.currentPiece.col = Math.floor(this.GRID_WIDTH / 2) - 1;
         this.canHold = true;
-        
-        console.log('New current piece:', this.currentPiece?.name, 'Next piece:', this.nextPiece?.name);
         
         // Check for game over (piece spawns in occupied space)
         if (this.checkCollision(this.currentPiece)) {
@@ -320,12 +313,7 @@ class TetrisGame {
     }
     
     movePiece(dx, dy) {
-        console.log('movePiece called:', dx, dy, 'Current piece:', this.currentPiece?.name);
-        
-        if (!this.currentPiece || this.gameOver || this.paused) {
-            console.log('movePiece blocked - no piece or game state');
-            return;
-        }
+        if (!this.currentPiece || this.gameOver || this.paused) return;
         
         const testPiece = this.currentPiece.clone();
         testPiece.col += dx;

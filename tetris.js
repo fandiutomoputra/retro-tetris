@@ -629,10 +629,11 @@ class TetrisGame {
     
     drawGrid() {
         
-        this.ctx.fillStyle = 'rgba(0, 10, 20, 0.9)';
+        // Brighter grid background
+        this.ctx.fillStyle = 'rgba(20, 40, 60, 0.95)';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         
-        console.log('Grid background drawn');
+        console.log('Grid background drawn (brightened)');
         
         // Draw grid cells
         for (let row = 0; row < this.GRID_HEIGHT; row++) {
@@ -677,7 +678,7 @@ class TetrisGame {
     }
     
     drawGridLines() {
-        this.ctx.strokeStyle = 'rgba(0, 170, 255, 0.3)';
+        this.ctx.strokeStyle = 'rgba(100, 200, 255, 0.4)';
         this.ctx.lineWidth = 1;
         
         // Vertical lines

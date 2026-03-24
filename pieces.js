@@ -71,7 +71,7 @@ const TETROMINOS = {
             [[0,0,0,0], [0,0,0,0], [1,1,1,1], [0,0,0,0]], // 180°
             [[0,1,0,0], [0,1,0,0], [0,1,0,0], [0,1,0,0]]  // 270°
         ],
-        '#00ffff', // Cyan
+        '#00ffff', // Cyan (bright)
         'I'
     ),
     
@@ -82,7 +82,7 @@ const TETROMINOS = {
             [[0,0,0], [1,1,1], [0,0,1]], // 180°
             [[0,1,0], [0,1,0], [1,1,0]]  // 270°
         ],
-        '#0000ff', // Blue
+        '#0088ff', // Bright Blue
         'J'
     ),
     
@@ -93,7 +93,7 @@ const TETROMINOS = {
             [[0,0,0], [1,1,1], [1,0,0]], // 180°
             [[1,1,0], [0,1,0], [0,1,0]]  // 270°
         ],
-        '#ff8800', // Orange
+        '#ff6600', // Bright Orange
         'L'
     ),
     
@@ -104,7 +104,7 @@ const TETROMINOS = {
             [[0,1,1,0], [0,1,1,0], [0,0,0,0], [0,0,0,0]], // 180°
             [[0,1,1,0], [0,1,1,0], [0,0,0,0], [0,0,0,0]]  // 270°
         ],
-        '#ffff00', // Yellow
+        '#ffff00', // Yellow (already bright)
         'O'
     ),
     
@@ -115,7 +115,7 @@ const TETROMINOS = {
             [[0,0,0], [0,1,1], [1,1,0]], // 180°
             [[1,0,0], [1,1,0], [0,1,0]]  // 270°
         ],
-        '#00ff00', // Green
+        '#00ff88', // Bright Green
         'S'
     ),
     
@@ -126,7 +126,7 @@ const TETROMINOS = {
             [[0,0,0], [1,1,1], [0,1,0]], // 180°
             [[0,1,0], [1,1,0], [0,1,0]]  // 270°
         ],
-        '#aa00ff', // Purple
+        '#cc44ff', // Bright Purple
         'T'
     ),
     
@@ -137,20 +137,20 @@ const TETROMINOS = {
             [[0,0,0], [1,1,0], [0,1,1]], // 180°
             [[0,1,0], [1,1,0], [1,0,0]]  // 270°
         ],
-        '#ff0000', // Red
+        '#ff4444', // Bright Red
         'Z'
     )
 };
 
-// Piece colors for rendering
+// Piece colors for rendering - BRIGHT VERSION
 const PIECE_COLORS = {
-    'I': '#00ffff', // Cyan
-    'J': '#0000ff', // Blue  
-    'L': '#ff8800', // Orange
-    'O': '#ffff00', // Yellow
-    'S': '#00ff00', // Green
-    'T': '#aa00ff', // Purple
-    'Z': '#ff0000'  // Red
+    'I': '#00ffff', // Cyan (bright)
+    'J': '#0088ff', // Bright Blue  
+    'L': '#ff6600', // Bright Orange
+    'O': '#ffff00', // Yellow (bright)
+    'S': '#00ff88', // Bright Green
+    'T': '#cc44ff', // Bright Purple
+    'Z': '#ff4444'  // Bright Red
 };
 
 // Helper functions

@@ -32,14 +32,15 @@ body {
         inset 0 0 30px rgba(0, 0, 0, 0.8);
 }
 
-/* CRT Screen Effect */
+/* CRT Screen Effect - BRIGHTENED */
 .crt-screen {
-    background: linear-gradient(to bottom, #001122, #000811);
-    border: 4px solid #333;
+    background: linear-gradient(to bottom, #002244, #001133);
+    border: 4px solid #555;
     border-radius: 10px;
     padding: 20px;
     position: relative;
     overflow: hidden;
+    box-shadow: inset 0 0 30px rgba(0, 100, 255, 0.2);
 }
 
 .scanlines {
@@ -167,7 +168,8 @@ body {
 
 #game-canvas {
     display: block;
-    background: rgba(0, 10, 20, 0.9);
+    background: rgba(10, 30, 50, 0.95);
+    box-shadow: inset 0 0 20px rgba(0, 150, 255, 0.3);
 }
 
 /* Info Boxes */

@@ -52,17 +52,35 @@ class TetrisGame {
         
         // Get canvas elements
         this.canvas = document.getElementById('game-canvas');
+        console.log('Game canvas:', this.canvas, 'width:', this.canvas?.width, 'height:', this.canvas?.height);
+        
+        if (!this.canvas) {
+            console.error('Game canvas not found!');
+            return;
+        }
+        
         this.ctx = this.canvas.getContext('2d');
+        console.log('Canvas context:', this.ctx);
+        
         this.nextCanvas = document.getElementById('next-canvas');
-        this.nextCtx = this.nextCanvas.getContext('2d');
+        this.nextCtx = this.nextCanvas?.getContext('2d');
         this.holdCanvas = document.getElementById('hold-canvas');
-        this.holdCtx = this.holdCanvas.getContext('2d');
+        this.holdCtx = this.holdCanvas?.getContext('2d');
         
         // Initialize audio
         this.initAudio();
         
         // Create first pieces
+        console.log('Testing getRandomPiece:', typeof getRandomPiece);
+        
+        if (typeof getRandomPiece !== 'function') {
+            console.error('getRandomPiece is not a function! pieces.js may not be loaded.');
+            return;
+        }
+        
         this.nextPiece = getRandomPiece();
+        console.log('Next piece created:', this.nextPiece?.name);
+        
         this.spawnNewPiece();
         
         // Setup event listeners
@@ -74,10 +92,11 @@ class TetrisGame {
         // Start game loop
         requestAnimationFrame(this.gameLoop);
         
-        console.log('Retro Tetris initialized!');
+        console.log('Retro Tetris initialized!', 'Game started:', this.gameStarted);
         
         // Auto-start game for better UX
         setTimeout(() => {
+            console.log('Auto-start timer fired');
             this.startGame();
         }, 500);
     }
@@ -224,7 +243,17 @@ class TetrisGame {
     }
     
     startGame() {
-        if (this.gameStarted && !this.gameOver) return;
+        console.log('startGame() called, current state:', {
+            gameStarted: this.gameStarted,
+            gameOver: this.gameOver,
+            paused: this.paused,
+            currentPiece: this.currentPiece?.name
+        });
+        
+        if (this.gameStarted && !this.gameOver) {
+            console.log('Game already started, returning');
+            return;
+        }
         
         this.gameStarted = true;
         this.gameOver = false;
@@ -313,7 +342,12 @@ class TetrisGame {
     }
     
     movePiece(dx, dy) {
-        if (!this.currentPiece || this.gameOver || this.paused) return;
+        console.log('movePiece(', dx, dy, ') called - currentPiece:', this.currentPiece?.name, 'gameOver:', this.gameOver, 'paused:', this.paused);
+        
+        if (!this.currentPiece || this.gameOver || this.paused) {
+            console.log('movePiece blocked');
+            return;
+        }
         
         const testPiece = this.currentPiece.clone();
         testPiece.col += dx;
@@ -537,11 +571,16 @@ class TetrisGame {
         
         // Game logic
         if (this.gameStarted && !this.gameOver && !this.paused) {
+            console.log('Game loop active, timestamp:', timestamp, 'lastDropTime:', this.lastDropTime, 'dropSpeed:', this.dropSpeed);
+            
             // Auto drop
             if (timestamp - this.lastDropTime > this.dropSpeed) {
+                console.log('Auto-drop triggered');
                 this.movePiece(0, 1);
                 this.lastDropTime = timestamp;
             }
+        } else {
+            console.log('Game loop inactive - started:', this.gameStarted, 'over:', this.gameOver, 'paused:', this.paused);
         }
         
         // Render

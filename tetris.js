@@ -587,10 +587,13 @@ class TetrisGame {
         this.render();
         
         // Continue game loop
+        console.log('Requesting next animation frame');
         requestAnimationFrame(this.gameLoop);
     }
     
     render() {
+        console.log('render() called - currentPiece:', this.currentPiece?.name, 'at row:', this.currentPiece?.row, 'col:', this.currentPiece?.col);
+        
         // Clear canvas
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         
@@ -609,10 +612,14 @@ class TetrisGame {
             }
             ghostPiece.row--;
             
-            drawPiece(this.ctx, ghostPiece, 0, 0, this.BLOCK_SIZE, true);
+            const ghostX = ghostPiece.col * this.BLOCK_SIZE;
+            const ghostY = ghostPiece.row * this.BLOCK_SIZE;
+            drawPiece(this.ctx, ghostPiece, ghostX, ghostY, this.BLOCK_SIZE, true);
             
             // Draw current piece
-            drawPiece(this.ctx, this.currentPiece, 0, 0, this.BLOCK_SIZE);
+            const pieceX = this.currentPiece.col * this.BLOCK_SIZE;
+            const pieceY = this.currentPiece.row * this.BLOCK_SIZE;
+            drawPiece(this.ctx, this.currentPiece, pieceX, pieceY, this.BLOCK_SIZE);
         }
         
         // Draw grid lines

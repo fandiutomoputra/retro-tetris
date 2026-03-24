@@ -212,8 +212,19 @@
     <script>
         // Initialize game when page loads
         document.addEventListener('DOMContentLoaded', function() {
-            const game = new TetrisGame();
-            game.init();
+            console.log('DOMContentLoaded - Initializing TetrisGame...');
+            try {
+                const game = new TetrisGame();
+                console.log('TetrisGame instantiated:', game);
+                game.init();
+                console.log('Game initialization complete');
+                
+                // Store game instance globally for debugging
+                window.tetrisGame = game;
+            } catch (error) {
+                console.error('Game initialization failed:', error);
+                alert('Game failed to initialize. Check console for errors.');
+            }
         });
     </script>
 </body>

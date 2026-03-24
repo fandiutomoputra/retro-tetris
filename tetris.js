@@ -84,10 +84,16 @@ class TetrisGame {
         
         // Start game loop
         requestAnimationFrame(this.gameLoop);
+        console.log('Game loop started');
         
         // Auto-start game for better UX
         setTimeout(() => {
-            this.startGame();
+            console.log('Auto-start timer firing, calling startGame()');
+            try {
+                this.startGame();
+            } catch (error) {
+                console.error('Auto-start failed:', error);
+            }
         }, 500);
     }
     
@@ -233,10 +239,13 @@ class TetrisGame {
     }
     
     startGame() {
+        console.log('=== startGame() CALLED ===');
+        console.log('Current state:', {
             gameStarted: this.gameStarted,
             gameOver: this.gameOver,
             paused: this.paused,
-            currentPiece: this.currentPiece?.name
+            currentPiece: this.currentPiece?.name,
+            nextPiece: this.nextPiece?.name
         });
         
         if (this.gameStarted && !this.gameOver) {

@@ -333,9 +333,16 @@ class TetrisGame {
         this.canHold = true;
         this.lastDropTime = performance.now(); // Reset drop timer
         
+        // Hide ALL game state screens
         document.getElementById('start-screen').style.display = 'none';
         document.getElementById('game-over-screen').style.display = 'none';
         document.getElementById('pause-screen').style.display = 'none';
+        
+        // Also hide the parent .game-state container
+        const gameStateElements = document.querySelectorAll('.game-state');
+        gameStateElements.forEach(el => {
+            el.style.display = 'none';
+        });
         
         this.updateUI();
         
@@ -353,6 +360,12 @@ class TetrisGame {
         
         this.paused = !this.paused;
         document.getElementById('pause-screen').style.display = this.paused ? 'flex' : 'none';
+        
+        // Also show/hide the parent .game-state container for pause
+        const gameStateElements = document.querySelectorAll('.game-state');
+        gameStateElements.forEach(el => {
+            el.style.display = this.paused ? 'flex' : 'none';
+        });
         
         if (this.paused && this.audio && this.audio.isSupported()) {
             this.audio.stopMusic();
@@ -884,7 +897,15 @@ class TetrisGame {
     }
     
     showGameOver() {
+        // Show game over screen
         document.getElementById('game-over-screen').style.display = 'flex';
+        
+        // Show the parent .game-state container
+        const gameStateElements = document.querySelectorAll('.game-state');
+        gameStateElements.forEach(el => {
+            el.style.display = 'flex';
+        });
+        
         this.updateUI();
     }
     

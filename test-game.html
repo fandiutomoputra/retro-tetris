@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Retro Tetris</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #222;
+            color: white;
+            font-family: monospace;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #ffcc00;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #333;
+            border-radius: 5px;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 3px;
+        }
+        .success {
+            background: #2a5;
+            color: white;
+        }
+        .error {
+            background: #c33;
+            color: white;
+        }
+        .warning {
+            background: #fa0;
+            color: black;
+        }
+        button {
+            background: #ff3300;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        button:hover {
+            background: #ff5500;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Retro Tetris Game Test</h1>
+        
+        <div class="test-section">
+            <h2>Game Files Check</h2>
+            <div id="files-status"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Game Initialization</h2>
+            <button onclick="testGameInit()">Test Game Initialization</button>
+            <div id="init-status"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Audio System</h2>
+            <button onclick="testAudio()">Test Audio System</button>
+            <div id="audio-status"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>Open Game</h2>
+            <p>Click below to open the actual game in a new tab:</p>
+            <button onclick="window.open('/index.html', '_blank')">Open Retro Tetris Game</button>
+        </div>
+    </div>
+    
+    <script>
+        // Test game files
+        function checkFiles() {
+            const files = ['index.html', 'style.css', 'tetris.js', 'pieces.js', 'audio.js'];
+            const statusDiv = document.getElementById('files-status');
+            let allOk = true;
+            
+            files.forEach(file => {
+                const xhr = new XMLHttpRequest();
+                xhr.open('HEAD', file, false);
+                try {
+                    xhr.send();
+                    if (xhr.status === 200) {
+                        statusDiv.innerHTML += `<div class="status success">✓ ${file} found</div>`;
+                    } else {
+                        statusDiv.innerHTML += `<div class="status error">✗ ${file} not found (${xhr.status})</div>`;
+                        allOk = false;
+                    }
+                } catch (e) {
+                    statusDiv.innerHTML += `<div class="status error">✗ ${file} error: ${e.message}</div>`;
+                    allOk = false;
+                }
+            });
+            
+            if (allOk) {
+                statusDiv.innerHTML += `<div class="status success">All game files are present and accessible!</div>`;
+            }
+        }
+        
+        // Test game initialization
+        function testGameInit() {
+            const statusDiv = document.getElementById('init-status');
+            statusDiv.innerHTML = '';
+            
+            try {
+                // Load the game scripts
+                const scriptPromises = [
+                    loadScript('pieces.js'),
+                    loadScript('audio.js'),
+                    loadScript('tetris.js')
+                ];
+                
+                Promise.all(scriptPromises).then(() => {
+                    // Check if classes are defined
+                    if (typeof TetrisGame === 'function' && typeof RetroAudio === 'function') {
+                        statusDiv.innerHTML = `<div class="status success">✓ Game classes loaded successfully</div>`;
+                        
+                        // Try to create an instance
+                        try {
+                            const game = new TetrisGame();
+                            statusDiv.innerHTML += `<div class="status success">✓ TetrisGame instance created</div>`;
+                            
+                            // Check if methods exist
+                            if (typeof game.init === 'function' && typeof game.startGame === 'function') {
+                                statusDiv.innerHTML += `<div class="status success">✓ Game methods are available</div>`;
+                            } else {
+                                statusDiv.innerHTML += `<div class="status warning">⚠ Some game methods may be missing</div>`;
+                            }
+                        } catch (e) {
+                            statusDiv.innerHTML += `<div class="status error">✗ Failed to create game instance: ${e.message}</div>`;
+                        }
+                    } else {
+                        statusDiv.innerHTML = `<div class="status error">✗ Game classes not loaded properly</div>`;
+                    }
+                }).catch(error => {
+                    statusDiv.innerHTML = `<div class="status error">✗ Failed to load scripts: ${error.message}</div>`;
+                });
+            } catch (e) {
+                statusDiv.innerHTML = `<div class="status error">✗ Test failed: ${e.message}</div>`;
+            }
+        }
+        
+        // Test audio system
+        function testAudio() {
+            const statusDiv = document.getElementById('audio-status');
+            statusDiv.innerHTML = '';
+            
+            try {
+                loadScript('audio.js').then(() => {
+                    if (typeof RetroAudio === 'function') {
+                        try {
+                            const audio = new RetroAudio();
+                            statusDiv.innerHTML = `<div class="status success">✓ RetroAudio instance created</div>`;
+                            
+                            if (audio.isSupported && typeof audio.isSupported === 'function') {
+                                const supported = audio.isSupported();
+                                statusDiv.innerHTML += `<div class="status ${supported ? 'success' : 'warning'}">✓ Web Audio API ${supported ? 'supported' : 'not supported'}</div>`;
+                                
+                                if (supported) {
+                                    // Test sound effects
+                                    try {
+                                        audio.playMove();
+                                        statusDiv.innerHTML += `<div class="status success">✓ Sound effects working</div>`;
+                                    } catch (e) {
+                                        statusDiv.innerHTML += `<div class="status warning">⚠ Sound effects error: ${e.message}</div>`;
+                                    }
+                                }
+                            }
+                        } catch (e) {
+                            statusDiv.innerHTML += `<div class="status error">✗ Audio initialization failed: ${e.message}</div>`;
+                        }
+                    } else {
+                        statusDiv.innerHTML = `<div class="status error">✗ RetroAudio class not found</div>`;
+                    }
+                });
+            } catch (e) {
+                statusDiv.innerHTML = `<div class="status error">✗ Audio test failed: ${e.message}</div>`;
+            }
+        }
+        
+        // Helper to load scripts
+        function loadScript(src) {
+            return new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = src;
+                script.onload = () => resolve();
+                script.onerror = () => reject(new Error(`Failed to load ${src}`));
+                document.head.appendChild(script);
+            });
+        }
+        
+        // Run file check on load
+        window.onload = checkFiles;
+    </script>
+</body>
+</html>

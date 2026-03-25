@@ -32,6 +32,10 @@ class TetrisGame {
         this.musicEnabled = true;
         this.sfxEnabled = true;
         
+        // Visual effects
+        this.particles = [];
+        this.effects = [];
+        
         // DOM elements
         this.canvas = null;
         this.ctx = null;
@@ -44,6 +48,68 @@ class TetrisGame {
         this.gameLoop = this.gameLoop.bind(this);
         this.handleKeyDown = this.handleKeyDown.bind(this);
         this.handleButtonClick = this.handleButtonClick.bind(this);
+    }
+    
+    // Particle system for visual effects
+    createLineClearParticles(row, color) {
+        for (let i = 0; i < 20; i++) {
+            this.particles.push({
+                x: Math.random() * this.canvas.width,
+                y: row * this.BLOCK_SIZE + this.BLOCK_SIZE / 2,
+                vx: (Math.random() - 0.5) * 8,
+                vy: (Math.random() - 0.5) * 8 - 2,
+                size: Math.random() * 4 + 2,
+                color: color,
+                life: 1.0,
+                decay: 0.02 + Math.random() * 0.03
+            });
+        }
+    }
+    
+    createExplosionParticles(x, y, color) {
+        for (let i = 0; i < 15; i++) {
+            this.particles.push({
+                x: x,
+                y: y,
+                vx: (Math.random() - 0.5) * 10,
+                vy: (Math.random() - 0.5) * 10 - 5,
+                size: Math.random() * 5 + 3,
+                color: color,
+                life: 1.0,
+                decay: 0.03 + Math.random() * 0.04
+            });
+        }
+    }
+    
+    updateParticles() {
+        for (let i = this.particles.length - 1; i >= 0; i--) {
+            const p = this.particles[i];
+            p.x += p.vx;
+            p.y += p.vy;
+            p.vy += 0.1; // gravity
+            p.life -= p.decay;
+            
+            if (p.life <= 0) {
+                this.particles.splice(i, 1);
+            }
+        }
+    }
+    
+    drawParticles() {
+        for (const p of this.particles) {
+            this.ctx.globalAlpha = p.life;
+            this.ctx.fillStyle = p.color;
+            this.ctx.beginPath();
+            this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            this.ctx.fill();
+            
+            // Glow effect
+            this.ctx.shadowBlur = 10;
+            this.ctx.shadowColor = p.color;
+            this.ctx.fill();
+            this.ctx.shadowBlur = 0;
+        }
+        this.ctx.globalAlpha = 1.0;
     }
     
     init() {
@@ -273,7 +339,7 @@ class TetrisGame {
         
         this.updateUI();
         
-        if (this.audio && this.audio.isSupported && this.musicEnabled) {
+        if (this.audio && this.audio.isSupported() && this.musicEnabled) {
             this.audio.startMusic();
         }
     }
@@ -288,9 +354,9 @@ class TetrisGame {
         this.paused = !this.paused;
         document.getElementById('pause-screen').style.display = this.paused ? 'flex' : 'none';
         
-        if (this.paused && this.audio && this.audio.isSupported) {
+        if (this.paused && this.audio && this.audio.isSupported()) {
             this.audio.stopMusic();
-        } else if (!this.paused && this.audio && this.audio.isSupported && this.musicEnabled) {
+        } else if (!this.paused && this.audio && this.audio.isSupported() && this.musicEnabled) {
             this.audio.startMusic();
         }
     }
@@ -300,7 +366,7 @@ class TetrisGame {
         const btn = document.getElementById('music-toggle');
         btn.innerHTML = `<i class="fas fa-music"></i> MUSIC: ${this.musicEnabled ? 'ON' : 'OFF'}`;
         
-        if (this.audio && this.audio.isSupported) {
+        if (this.audio && this.audio.isSupported()) {
             if (this.musicEnabled && !this.paused) {
                 this.audio.startMusic();
             } else {
@@ -493,6 +559,7 @@ class TetrisGame {
     
     clearLines() {
         let linesCleared = 0;
+        const clearedRows = [];
         
         for (let row = this.GRID_HEIGHT - 1; row >= 0; row--) {
             let isLineComplete = true;
@@ -505,6 +572,9 @@ class TetrisGame {
             }
             
             if (isLineComplete) {
+                // Get the color of the first block in the line for particles
+                const lineColor = this.grid[row][0] || '#ffffff';
+                
                 // Remove the line
                 for (let r = row; r > 0; r--) {
                     this.grid[r] = [...this.grid[r - 1]];
@@ -512,7 +582,28 @@ class TetrisGame {
                 this.grid[0] = new Array(this.GRID_WIDTH).fill(null);
                 
                 linesCleared++;
+                clearedRows.push({ row, color: lineColor });
                 row++; // Check same row again after shifting
+            }
+        }
+        
+        // Create particle effects for cleared lines
+        if (clearedRows.length > 0 && this.canvas) {
+            for (const { row, color } of clearedRows) {
+                this.createLineClearParticles(row, color);
+            }
+            
+            // Special effect for Tetris (4 lines)
+            if (clearedRows.length === 4) {
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(() => {
+                        this.createExplosionParticles(
+                            this.canvas.width / 2,
+                            this.canvas.height / 2,
+                            ['#ff0000', '#00ff00', '#0000ff', '#ffff00'][i % 4]
+                        );
+                    }, i * 100);
+                }
             }
         }
         
@@ -527,6 +618,18 @@ class TetrisGame {
     addScore(points) {
         this.score += points;
         this.updateUI();
+        
+        // Visual feedback for scoring
+        if (points > 0) {
+            const scoreElement = document.getElementById('score');
+            scoreElement.style.transform = 'scale(1.2)';
+            scoreElement.style.color = '#ffff00';
+            
+            setTimeout(() => {
+                scoreElement.style.transform = 'scale(1)';
+                scoreElement.style.color = '#00ff00';
+            }, 200);
+        }
     }
     
     checkCollision(piece) {
@@ -579,6 +682,9 @@ class TetrisGame {
             console.log('Game loop inactive - started:', this.gameStarted, 'over:', this.gameOver, 'paused:', this.paused);
         }
         
+        // Always update particles (even when paused)
+        this.updateParticles();
+        
         // Render
         this.render();
         
@@ -625,12 +731,16 @@ class TetrisGame {
         
         // Draw grid lines
         this.drawGridLines();
+        
+        // Update and draw particles
+        this.updateParticles();
+        this.drawParticles();
     }
     
     drawGrid() {
         
         // Brighter grid background
-        this.ctx.fillStyle = 'rgba(20, 40, 60, 0.95)';
+        this.ctx.fillStyle = 'rgba(30, 60, 90, 0.95)';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         
         console.log('Grid background drawn (brightened)');
@@ -641,8 +751,8 @@ class TetrisGame {
                 const x = col * this.BLOCK_SIZE;
                 const y = row * this.BLOCK_SIZE;
                 
-                this.ctx.strokeStyle = 'rgba(0, 100, 200, 0.2)';
-                this.ctx.lineWidth = 0.5;
+                this.ctx.strokeStyle = 'rgba(0, 150, 255, 0.3)';
+                this.ctx.lineWidth = 0.8;
                 this.ctx.strokeRect(x, y, this.BLOCK_SIZE, this.BLOCK_SIZE);
             }
         }

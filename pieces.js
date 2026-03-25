@@ -144,13 +144,13 @@ const TETROMINOS = {
 
 // Piece colors for rendering - BRIGHT VERSION
 const PIECE_COLORS = {
-    'I': '#00ffff', // Cyan (bright)
-    'J': '#0088ff', // Bright Blue  
-    'L': '#ff6600', // Bright Orange
-    'O': '#ffff00', // Yellow (bright)
-    'S': '#00ff88', // Bright Green
-    'T': '#cc44ff', // Bright Purple
-    'Z': '#ff4444'  // Bright Red
+    'I': '#00ffff', // Cyan (very bright)
+    'J': '#00aaff', // Bright Blue  
+    'L': '#ff8800', // Bright Orange
+    'O': '#ffff00', // Yellow (very bright)
+    'S': '#00ff00', // Bright Green
+    'T': '#ff00ff', // Bright Purple
+    'Z': '#ff0000'  // Bright Red
 };
 
 // Helper functions
@@ -185,9 +185,18 @@ function drawPiece(ctx, piece, x, y, size, isGhost = false) {
                 const blockX = x + c * size;
                 const blockY = y + r * size;
                 
+                // Glow effect for non-ghost pieces
+                if (!isGhost) {
+                    ctx.shadowBlur = 8;
+                    ctx.shadowColor = color;
+                }
+                
                 // Draw block with solid color
                 ctx.fillStyle = color;
                 ctx.fillRect(blockX, blockY, size, size);
+                
+                // Reset shadow
+                ctx.shadowBlur = 0;
                 
                 // Block border
                 ctx.strokeStyle = isGhost ? 'rgba(255, 255, 255, 0.5)' : '#ffffff';

@@ -52,7 +52,11 @@ class TetrisGame {
     
     // Particle system for visual effects
     createLineClearParticles(row, color) {
-        for (let i = 0; i < 20; i++) {
+        // Reduce particles on mobile for better performance
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        const particleCount = isMobile ? 10 : 20;
+        
+        for (let i = 0; i < particleCount; i++) {
             this.particles.push({
                 x: Math.random() * this.canvas.width,
                 y: row * this.BLOCK_SIZE + this.BLOCK_SIZE / 2,

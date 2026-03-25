@@ -694,7 +694,15 @@ class TetrisGame {
     }
     
     render() {
-        console.log('Canvas context:', this.ctx, 'Canvas:', this.canvas);
+        console.log('=== render() CALLED ===');
+        console.log('Game state:', {
+            started: this.gameStarted,
+            over: this.gameOver,
+            paused: this.paused,
+            currentPiece: this.currentPiece?.name
+        });
+        console.log('Canvas:', this.canvas?.id, 'width:', this.canvas?.width, 'height:', this.canvas?.height);
+        console.log('Context available:', !!this.ctx);
         
         if (!this.ctx) {
             console.error('Canvas context is null!');
@@ -702,6 +710,7 @@ class TetrisGame {
         }
         
         // Draw grid background FIRST (fills entire canvas)
+        console.log('Calling drawGrid()...');
         this.drawGrid();
         
         // Clear doesn't work well with our drawGrid approach
@@ -739,12 +748,20 @@ class TetrisGame {
     }
     
     drawGrid() {
+        console.log('=== drawGrid() CALLED ===');
+        console.log('Canvas dimensions:', this.canvas.width, 'x', this.canvas.height);
+        console.log('Context available:', !!this.ctx);
+        
+        if (!this.ctx) {
+            console.error('No canvas context in drawGrid()!');
+            return;
+        }
         
         // SOLID background - NO transparency
-        this.ctx.fillStyle = 'rgb(40, 70, 100)';
+        this.ctx.fillStyle = 'rgb(255, 0, 0)'; // RED untuk testing - HARUS KELIHATAN!
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         
-        console.log('Grid background drawn (SOLID bright blue)');
+        console.log('Grid background drawn (RED for testing)');
         
         // Draw grid cells
         for (let row = 0; row < this.GRID_HEIGHT; row++) {

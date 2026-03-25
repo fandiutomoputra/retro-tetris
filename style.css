@@ -502,6 +502,7 @@ body {
     .game-title {
         font-size: 1.8rem;
         margin-bottom: 10px;
+        text-align: center;
     }
     
     .panel {
@@ -516,60 +517,116 @@ body {
     
     .arcade-cabinet {
         padding: 10px;
-        max-width: 95vw;
+        max-width: 98vw;
+        width: 100%;
     }
     
+    /* MOBILE LAYOUT RE-DESIGN */
     .game-container {
         flex-direction: column;
-        gap: 10px;
+        gap: 15px;
     }
     
-    .left-panel, .right-panel {
+    /* Game area (board) takes TOP position on mobile */
+    .game-area {
+        order: 1;
         width: 100%;
         display: flex;
         flex-direction: column;
         align-items: center;
     }
     
-    /* Make info boxes more compact */
+    /* Info panels become horizontal grid BELOW game board */
+    .left-panel {
+        order: 2;
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+    }
+    
+    .right-panel {
+        order: 3;
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+    }
+    
+    /* Compact info boxes for mobile grid */
     .info-box {
         width: 100%;
-        max-width: 180px;
-        margin: 5px 0;
-        padding: 6px;
+        margin: 0;
+        padding: 8px;
+        min-height: 80px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
     }
     
     .info-box h2 {
-        font-size: 0.9rem;
+        font-size: 0.75rem;
         margin-bottom: 5px;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 5px;
+        gap: 4px;
+        text-align: center;
     }
     
     .score-display, .level-display, .lines-display {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
+        text-align: center;
     }
     
-    /* Smaller labels on mobile */
-    .info-box h2 {
-        font-size: 0.8rem;
+    /* Game canvas sizing for mobile */
+    #game-canvas {
+        max-width: 95vw;
+        max-height: 50vh;
+        width: 280px;
+        height: 480px;
     }
     
-    /* Even smaller for very small screens */
-    @media (max-width: 380px) {
-        .info-box h2 {
-            font-size: 0.7rem;
+    /* Landscape mode optimization */
+    @media (max-height: 500px) and (orientation: landscape) {
+        .game-container {
+            flex-direction: row;
+            flex-wrap: wrap;
         }
         
-        .info-box h2 i {
-            font-size: 0.6rem;
+        .game-area {
+            order: 1;
+            width: 60%;
         }
         
-        .score-display, .level-display, .lines-display {
-            font-size: 1rem;
+        .left-panel, .right-panel {
+            width: 40%;
+            grid-template-columns: 1fr;
         }
+        
+        #game-canvas {
+            max-height: 80vh;
+            height: 350px;
+        }
+        
+        .mobile-controls {
+            order: 4;
+            width: 100%;
+            margin-top: 10px;
+        }
+    }
+    
+    /* Next/Hold canvases smaller */
+    #next-canvas, #hold-canvas {
+        width: 50px !important;
+        height: 50px !important;
+    }
+    
+    /* Mobile controls at bottom */
+    .mobile-controls {
+        order: 3;
+        margin-top: 20px;
     }
 }
 

@@ -501,38 +501,38 @@ body {
         align-items: flex-start;
     }
     
-    /* Game board on LEFT (main area) */
+    /* Game board on LEFT (scaled down for mobile) */
     .game-area {
-        flex: 1;
-        min-width: 250px;
-        max-width: 60%;
+        flex: 0 0 45%;
+        min-width: 180px;
+        max-width: 45%;
         display: flex;
         flex-direction: column;
         align-items: center;
     }
     
-    /* Info panels on RIGHT (compact vertical) */
+    /* Info panels on RIGHT (more compact) */
     .left-panel {
-        flex: 0 0 35%;
-        min-width: 150px;
+        flex: 0 0 25%;
+        min-width: 120px;
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 6px;
     }
     
     .right-panel {
-        flex: 0 0 35%;
-        min-width: 150px;
+        flex: 0 0 25%;
+        min-width: 120px;
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 6px;
     }
     
-    /* Compact info boxes */
+    /* Ultra compact info boxes for mobile */
     .info-box {
         width: 100%;
-        padding: 8px 5px;
-        min-height: 65px;
+        padding: 6px 4px;
+        min-height: 55px;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -540,26 +540,47 @@ body {
     }
     
     .info-box h2 {
-        font-size: 0.75rem;
-        margin-bottom: 4px;
+        font-size: 0.65rem;
+        margin-bottom: 3px;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 3px;
+        gap: 2px;
         text-align: center;
     }
     
     .score-display, .level-display, .lines-display {
-        font-size: 1.1rem;
+        font-size: 0.9rem;
         text-align: center;
     }
     
-    /* Game canvas */
+    /* Hide icons on very small mobile to save space */
+    @media (max-width: 400px) {
+        .info-box h2 i {
+            display: none;
+        }
+        
+        .info-box h2 {
+            font-size: 0.6rem;
+        }
+    }
+    
+    /* Game canvas - smaller for mobile */
     #game-canvas {
         width: 100%;
         max-width: 100%;
         height: auto;
-        max-height: 55vh;
+        max-height: 45vh;
+    }
+    
+    /* Ensure mobile controls are visible */
+    .mobile-controls {
+        width: 100%;
+        margin-top: 10px;
+        padding: 5px;
+        order: 3;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 8px;
     }
     
     /* Next/Hold canvases */
@@ -575,26 +596,45 @@ body {
         order: 3;
     }
     
-    /* Very small screens - stack vertically */
+    /* Very small screens - optimized vertical stack */
     @media (max-width: 480px) {
         .game-container {
             flex-direction: column;
+            gap: 8px;
         }
         
-        .game-area, .left-panel, .right-panel {
+        .game-area {
             width: 100%;
             max-width: 100%;
+            flex: 0 0 auto;
         }
         
         .left-panel, .right-panel {
+            width: 100%;
+            max-width: 100%;
             flex-direction: row;
             flex-wrap: wrap;
-            justify-content: space-around;
+            justify-content: center;
+            gap: 5px;
         }
         
         .info-box {
-            width: 48%;
-            min-width: 140px;
+            width: 30%;
+            min-width: 90px;
+            padding: 4px 2px;
+            min-height: 50px;
+        }
+        
+        .info-box h2 {
+            font-size: 0.55rem;
+        }
+        
+        .score-display, .level-display, .lines-display {
+            font-size: 0.8rem;
+        }
+        
+        #game-canvas {
+            max-height: 40vh;
         }
     }
 }@media (max-width: 480px) {

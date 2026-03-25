@@ -701,11 +701,12 @@ class TetrisGame {
             return;
         }
         
-        // Clear canvas
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        
-        // Draw grid background
+        // Draw grid background FIRST (fills entire canvas)
         this.drawGrid();
+        
+        // Clear doesn't work well with our drawGrid approach
+        // Instead, drawGrid() already fills the entire canvas with background
+        // So we don't need clearRect()
         
         // Draw locked pieces
         this.drawLockedPieces();
@@ -739,11 +740,11 @@ class TetrisGame {
     
     drawGrid() {
         
-        // Brighter grid background
-        this.ctx.fillStyle = 'rgba(30, 60, 90, 0.95)';
+        // SOLID background - NO transparency
+        this.ctx.fillStyle = 'rgb(40, 70, 100)';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         
-        console.log('Grid background drawn (brightened)');
+        console.log('Grid background drawn (SOLID bright blue)');
         
         // Draw grid cells
         for (let row = 0; row < this.GRID_HEIGHT; row++) {

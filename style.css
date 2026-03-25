@@ -143,13 +143,29 @@ body {
     100% { transform: translateX(-100%); }
 }
 
-/* Game Container */
+/* Game Container - PC DEFAULT */
 .game-container {
     display: flex;
     gap: 20px;
     margin-bottom: 20px;
     position: relative;
     z-index: 2;
+}
+
+/* PC protection - ensure desktop stays nice */
+@media (min-width: 769px) {
+    .left-panel, .right-panel {
+        flex: 0 0 200px;
+    }
+    
+    .info-box h2 i {
+        display: inline-block;
+    }
+    
+    .info-box {
+        min-height: 90px;
+        padding: 15px;
+    }
 }
 
 .panel {
@@ -501,38 +517,40 @@ body {
         align-items: flex-start;
     }
     
-    /* Game board on LEFT (scaled down for mobile) */
+    /* Game board gets MORE space (score panels are tiny) */
     .game-area {
-        flex: 0 0 45%;
-        min-width: 180px;
-        max-width: 45%;
+        flex: 0 0 70%;
+        min-width: 200px;
+        max-width: 70%;
         display: flex;
         flex-direction: column;
         align-items: center;
     }
     
-    /* Info panels on RIGHT (more compact) */
+    /* SUPER COMPACT score panels for mobile (10-15% width) */
     .left-panel {
-        flex: 0 0 25%;
-        min-width: 120px;
+        flex: 0 0 12%;
+        min-width: 80px;
+        max-width: 100px;
         display: flex;
         flex-direction: column;
-        gap: 6px;
+        gap: 4px;
     }
     
     .right-panel {
-        flex: 0 0 25%;
-        min-width: 120px;
+        flex: 0 0 12%;
+        min-width: 80px;
+        max-width: 100px;
         display: flex;
         flex-direction: column;
-        gap: 6px;
+        gap: 4px;
     }
     
-    /* Ultra compact info boxes for mobile */
+    /* EXTREMELY compact info boxes for mobile (10% width target) */
     .info-box {
         width: 100%;
-        padding: 6px 4px;
-        min-height: 55px;
+        padding: 4px 2px;
+        min-height: 45px;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -540,29 +558,31 @@ body {
     }
     
     .info-box h2 {
-        font-size: 0.65rem;
-        margin-bottom: 3px;
+        font-size: 0.5rem;
+        margin-bottom: 2px;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 2px;
+        gap: 1px;
         text-align: center;
+        line-height: 1;
     }
     
     .score-display, .level-display, .lines-display {
-        font-size: 0.9rem;
+        font-size: 0.7rem;
         text-align: center;
+        line-height: 1;
     }
     
-    /* Hide icons on very small mobile to save space */
-    @media (max-width: 400px) {
-        .info-box h2 i {
-            display: none;
-        }
-        
-        .info-box h2 {
-            font-size: 0.6rem;
-        }
+    /* Hide ALL icons on mobile to save maximum space */
+    .info-box h2 i {
+        display: none;
+    }
+    
+    /* Next/Hold canvases tiny */
+    #next-canvas, #hold-canvas {
+        width: 35px !important;
+        height: 35px !important;
     }
     
     /* Game canvas - smaller for mobile */
@@ -596,11 +616,11 @@ body {
         order: 3;
     }
     
-    /* Very small screens - optimized vertical stack */
+    /* Very small screens - EXTREME compact vertical stack */
     @media (max-width: 480px) {
         .game-container {
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
         }
         
         .game-area {
@@ -614,27 +634,39 @@ body {
             max-width: 100%;
             flex-direction: row;
             flex-wrap: wrap;
-            justify-content: center;
-            gap: 5px;
+            justify-content: space-between;
+            gap: 3px;
         }
         
         .info-box {
-            width: 30%;
-            min-width: 90px;
-            padding: 4px 2px;
-            min-height: 50px;
+            width: 18%;
+            min-width: 70px;
+            padding: 3px 1px;
+            min-height: 40px;
         }
         
         .info-box h2 {
-            font-size: 0.55rem;
+            font-size: 0.45rem;
+            margin-bottom: 1px;
         }
         
         .score-display, .level-display, .lines-display {
-            font-size: 0.8rem;
+            font-size: 0.65rem;
         }
         
         #game-canvas {
-            max-height: 40vh;
+            max-height: 50vh;
+        }
+        
+        /* Settings box gets 2 columns */
+        .settings {
+            flex-direction: column;
+            gap: 3px;
+        }
+        
+        .arcade-btn {
+            padding: 4px 6px;
+            font-size: 0.5rem;
         }
     }
 }@media (max-width: 480px) {

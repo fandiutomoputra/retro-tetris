@@ -4,6 +4,10 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    user-select: none; /* Prevent text selection */
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE/Edge */
 }
 
 body {
@@ -14,8 +18,9 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow-x: hidden;
-    padding: 20px;
+    overflow: hidden; /* NO SCROLLING - hide both x and y */
+    margin: 0;
+    padding: 0;
 }
 
 /* Arcade Cabinet - BRIGHTER */
@@ -533,12 +538,18 @@ body {
         min-height: 60px;
         font-size: 1.2rem;
         margin: 5px;
+        touch-action: manipulation; /* Prevent double-tap zoom */
     }
     
     /* Adjust game canvas size for mobile */
     #game-canvas {
         max-width: 100%;
         height: auto;
+    }
+    
+    /* Prevent touch scrolling on game area */
+    .game-container, .crt-screen, .arcade-cabinet {
+        touch-action: none;
     }
 }
 }

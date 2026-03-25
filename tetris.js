@@ -190,6 +190,14 @@ class TetrisGame {
     }
     
     setupEventListeners() {
+        // Prevent page scrolling with arrow keys and space
+        document.addEventListener('keydown', (e) => {
+            // Prevent default for game control keys
+            if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].includes(e.code)) {
+                e.preventDefault();
+            }
+        });
+        
         // Keyboard controls
         document.addEventListener('keydown', this.handleKeyDown);
         

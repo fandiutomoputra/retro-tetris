@@ -757,11 +757,11 @@ class TetrisGame {
             return;
         }
         
-        // SOLID background - NO transparency
-        this.ctx.fillStyle = 'rgb(255, 0, 0)'; // RED untuk testing - HARUS KELIHATAN!
+        // SOLID background - Bright blue
+        this.ctx.fillStyle = 'rgb(50, 80, 120)';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         
-        console.log('Grid background drawn (RED for testing)');
+        console.log('Grid background drawn (bright blue)');
         
         // Draw grid cells
         for (let row = 0; row < this.GRID_HEIGHT; row++) {

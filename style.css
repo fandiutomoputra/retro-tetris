@@ -501,18 +501,75 @@ body {
 @media (max-width: 768px) {
     .game-title {
         font-size: 1.8rem;
+        margin-bottom: 10px;
     }
     
     .panel {
-        padding: 10px;
+        padding: 8px;
+        margin: 5px;
     }
     
     .mobile-controls {
         display: grid;
+        margin-top: 15px;
     }
     
     .arcade-cabinet {
-        padding: 15px;
+        padding: 10px;
+        max-width: 95vw;
+    }
+    
+    .game-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .left-panel, .right-panel {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    /* Make info boxes more compact */
+    .info-box {
+        width: 100%;
+        max-width: 180px;
+        margin: 5px 0;
+        padding: 6px;
+    }
+    
+    .info-box h2 {
+        font-size: 0.9rem;
+        margin-bottom: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+    }
+    
+    .score-display, .level-display, .lines-display {
+        font-size: 1.2rem;
+    }
+    
+    /* Smaller labels on mobile */
+    .info-box h2 {
+        font-size: 0.8rem;
+    }
+    
+    /* Even smaller for very small screens */
+    @media (max-width: 380px) {
+        .info-box h2 {
+            font-size: 0.7rem;
+        }
+        
+        .info-box h2 i {
+            font-size: 0.6rem;
+        }
+        
+        .score-display, .level-display, .lines-display {
+            font-size: 1rem;
+        }
     }
 }
 
@@ -543,8 +600,16 @@ body {
     
     /* Adjust game canvas size for mobile */
     #game-canvas {
-        max-width: 100%;
+        max-width: 95vw;
+        max-height: 50vh;
+        width: auto;
         height: auto;
+    }
+    
+    /* Make next/hold canvases smaller on mobile */
+    #next-canvas, #hold-canvas {
+        width: 60px !important;
+        height: 60px !important;
     }
     
     /* Prevent touch scrolling on game area */

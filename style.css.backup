@@ -477,12 +477,42 @@ body {
 }
 
 .decal-text {
-/* MOBILE LAYOUT FIX: Side-by-side design */
+    margin: 10px 0;
+    transform: rotate(180deg);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .game-container {
+        flex-direction: column;
+    }
+    
+    .left-panel, .right-panel {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+    
+    .cabinet-decal {
+        display: none;
+    }
+}
+
 @media (max-width: 768px) {
     .game-title {
         font-size: 1.8rem;
         margin-bottom: 10px;
         text-align: center;
+    }
+    
+    .panel {
+        padding: 8px;
+        margin: 5px;
+    }
+    
+    .mobile-controls {
+        display: grid;
+        margin-top: 15px;
     }
     
     .arcade-cabinet {
@@ -491,48 +521,44 @@ body {
         width: 100%;
     }
     
-    /* SIDE-BY-SIDE LAYOUT */
+    /* MOBILE LAYOUT RE-DESIGN */
     .game-container {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        gap: 10px;
-        justify-content: center;
-        align-items: flex-start;
+        flex-direction: column;
+        gap: 15px;
     }
     
-    /* Game board on LEFT (main area) */
+    /* Game area (board) takes TOP position on mobile */
     .game-area {
-        flex: 1;
-        min-width: 250px;
-        max-width: 60%;
+        order: 1;
+        width: 100%;
         display: flex;
         flex-direction: column;
         align-items: center;
     }
     
-    /* Info panels on RIGHT (compact vertical) */
+    /* Info panels become horizontal grid BELOW game board */
     .left-panel {
-        flex: 0 0 35%;
-        min-width: 150px;
-        display: flex;
-        flex-direction: column;
+        order: 2;
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
         gap: 8px;
     }
     
     .right-panel {
-        flex: 0 0 35%;
-        min-width: 150px;
-        display: flex;
-        flex-direction: column;
+        order: 3;
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
         gap: 8px;
     }
     
-    /* Compact info boxes */
+    /* Compact info boxes for mobile grid */
     .info-box {
         width: 100%;
-        padding: 8px 5px;
-        min-height: 65px;
+        margin: 0;
+        padding: 8px;
+        min-height: 80px;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -541,11 +567,11 @@ body {
     
     .info-box h2 {
         font-size: 0.75rem;
-        margin-bottom: 4px;
+        margin-bottom: 5px;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 3px;
+        gap: 4px;
         text-align: center;
     }
     
@@ -554,50 +580,57 @@ body {
         text-align: center;
     }
     
-    /* Game canvas */
+    /* Game canvas sizing for mobile */
     #game-canvas {
-        width: 100%;
-        max-width: 100%;
-        height: auto;
-        max-height: 55vh;
+        max-width: 95vw;
+        max-height: 50vh;
+        width: 280px;
+        height: 480px;
     }
     
-    /* Next/Hold canvases */
+    /* Landscape mode optimization */
+    @media (max-height: 500px) and (orientation: landscape) {
+        .game-container {
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+        
+        .game-area {
+            order: 1;
+            width: 60%;
+        }
+        
+        .left-panel, .right-panel {
+            width: 40%;
+            grid-template-columns: 1fr;
+        }
+        
+        #game-canvas {
+            max-height: 80vh;
+            height: 350px;
+        }
+        
+        .mobile-controls {
+            order: 4;
+            width: 100%;
+            margin-top: 10px;
+        }
+    }
+    
+    /* Next/Hold canvases smaller */
     #next-canvas, #hold-canvas {
-        width: 45px !important;
-        height: 45px !important;
+        width: 50px !important;
+        height: 50px !important;
     }
     
     /* Mobile controls at bottom */
     .mobile-controls {
-        width: 100%;
-        margin-top: 15px;
         order: 3;
+        margin-top: 20px;
     }
-    
-    /* Very small screens - stack vertically */
-    @media (max-width: 480px) {
-        .game-container {
-            flex-direction: column;
-        }
-        
-        .game-area, .left-panel, .right-panel {
-            width: 100%;
-            max-width: 100%;
-        }
-        
-        .left-panel, .right-panel {
-            flex-direction: row;
-            flex-wrap: wrap;
-            justify-content: space-around;
-        }
-        
-        .info-box {
-            width: 48%;
-            min-width: 140px;
-        }
-    }
-}@media (max-width: 480px) {
+}
+
+@media (max-width: 480px) {
     body {
         padding: 10px;
     }

@@ -1,0 +1,64 @@
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+    
+    .game-title {
+        font-size: 1.5rem;
+    }
+    
+    .left-panel, .right-panel {
+        grid-template-columns: 1fr;
+    }
+    
+    .score-display, .level-display, .lines-display {
+        font-size: 1.5rem;
+    }
+    
+    /* Larger mobile buttons for better touch */
+    .mobile-btn {
+        min-height: 60px;
+        font-size: 1.2rem;
+        margin: 5px;
+        touch-action: manipulation; /* Prevent double-tap zoom */
+    }
+    
+    /* Adjust game canvas size for mobile */
+    #game-canvas {
+        max-width: 95vw;
+        max-height: 50vh;
+        width: auto;
+        height: auto;
+    }
+    
+    /* Make next/hold canvases smaller on mobile */
+    #next-canvas, #hold-canvas {
+        width: 60px !important;
+        height: 60px !important;
+    }
+    
+    /* Prevent touch scrolling on game area */
+    .game-container, .crt-screen, .arcade-cabinet {
+        touch-action: none;
+    }
+}
+}
+
+/* Game State Indicators */
+#game-status {
+    animation: statusBlink 2s infinite;
+}
+
+@keyframes statusBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* Piece Colors (for reference) */
+.piece-i { color: #00ffff; }
+.piece-j { color: #0000ff; }
+.piece-l { color: #ff8800; }
+.piece-o { color: #ffff00; }
+.piece-s { color: #00ff00; }
+.piece-t { color: #aa00ff; }
+.piece-z { color: #ff0000; }
